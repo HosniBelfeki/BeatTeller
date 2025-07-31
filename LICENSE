@@ -1,0 +1,64 @@
+MIT License
+
+Copyright (c) 2025 BeatTeller - Qloo LLM Hackathon Project
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+This project uses several third-party libraries and services:
+
+### Backend Dependencies
+- Flask: BSD-3-Clause License
+- SQLAlchemy: MIT License
+- Requests: Apache License 2.0
+- Flask-CORS: MIT License
+- Python-dotenv: BSD License
+
+### Frontend Dependencies
+- React: MIT License
+- Vite: MIT License
+- Tailwind CSS: MIT License
+- Radix UI: MIT License
+- Lucide React: ISC License
+- Framer Motion: MIT License
+
+### External APIs
+- Qloo API: Subject to Qloo Terms of Service
+- Google Gemini AI: Subject to Google AI Terms of Service
+
+### Fonts and Assets
+- Inter Font: SIL Open Font License 1.1
+- Background Images: Various licenses (see individual attribution)
+
+## Attribution
+
+This project was developed for the Qloo LLM Hackathon 2025. Special thanks to:
+- Qloo for providing the taste intelligence API
+- Google for the Gemini AI capabilities
+- The open-source community for the amazing tools and libraries
+
+## Disclaimer
+
+This project is submitted for the Qloo LLM Hackathon 2025 and is subject to the hackathon's terms and conditions. The use of Qloo and Gemini APIs is for demonstration purposes within the scope of the hackathon.
+
+For commercial use or deployment beyond the hackathon scope, please ensure compliance with all relevant API terms of service and obtain appropriate licenses.
+
