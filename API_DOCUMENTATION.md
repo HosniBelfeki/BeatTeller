@@ -772,5 +772,5 @@ fetch('/api/discover', {
 
 ---
 
-This documentation covers all aspects of the BeatTeller API API. For specific questions or advanced use cases, consult the provided examples or contact the development team.
+This documentation covers all aspects of the Harmony AI API. For specific questions or advanced use cases, consult the provided examples or contact the development team.
 
