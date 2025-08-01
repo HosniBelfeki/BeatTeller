@@ -1020,7 +1020,7 @@ def health_check():
     """Enhanced API health check with feature status"""
     return jsonify({
         "success": True,
-        "message": "Harmony AI API is running",
+        "message": "BeatTeller API is running",
         "version": "2.0.0",
         "features": {
             "music_discovery": True,
