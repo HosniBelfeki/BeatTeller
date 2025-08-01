@@ -4,204 +4,571 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeatTeller</title>
+    <title>BeatTeller Backend API Tester</title>
     <style>
-        body { font-family: sans-serif; margin: 20px; }
-        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
-        h2 { margin-top: 0; }
-        label { display: inline-block; width: 80px; margin-bottom: 5px; }
-        input[type="text"], input[type="email"], input[type="number"] { margin-bottom: 10px; padding: 5px; width: 200px; }
-        button { padding: 8px 15px; margin-right: 10px; cursor: pointer; }
-        pre { background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section { 
+            background: white;
+            margin-bottom: 20px; 
+            padding: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section h2 { 
+            margin-top: 0; 
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: 600;
+            color: #555;
+        }
+        .form-group input, .form-group textarea, .form-group select { 
+            width: 100%;
+            padding: 10px; 
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        button { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result { 
+            background: #f8f9fa; 
+            border: 1px solid #e9ecef; 
+            border-radius: 5px; 
+            padding: 15px; 
+            margin-top: 15px; 
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .result.error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .result.success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .status-info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .endpoint-url {
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+            color: #666;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .config-section {
+            background: #fff3e0;
+            border: 2px solid #ffb74d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .config-section h3 {
+            margin-top: 0;
+            color: #e65100;
+        }
     </style>
 </head>
 <body>
-    <h1>User API Test</h1>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Backend API Response Tester</h1>
+            <p>Test BeatTeller API and see exactly what backend returns</p>
+        </div>
 
-    <!-- Get All Users -->
-    <div class="section">
-        <h2>Get All Users (GET /users)</h2>
-        <button onclick="getUsers()">Get Users</button>
-        <pre id="get-users-result"></pre>
-    </div>
 
-    <!-- Create User -->
-    <div class="section">
-        <h2>Create User (POST /users)</h2>
-        <label for="create-username">Username:</label>
-        <input type="text" id="create-username" name="username"><br>
-        <label for="create-email">Email:</label>
-        <input type="email" id="create-email" name="email"><br>
-        <button onclick="createUser()">Create User</button>
-        <pre id="create-user-result"></pre>
-    </div>
 
-    <!-- Get Single User -->
-    <div class="section">
-        <h2>Get Single User (GET /users/&lt;id&gt;)</h2>
-        <label for="get-user-id">User ID:</label>
-        <input type="number" id="get-user-id" name="user_id"><br>
-        <button onclick="getUser()">Get User</button>
-        <pre id="get-user-result"></pre>
-    </div>
+        <!-- Health Check -->
+        <div class="section">
+            <h2>🏥 Health Check</h2>
+            <div class="endpoint-url">GET /api/health</div>
+            <button onclick="checkHealth()">Check API Health</button>
+            <div class="loading" id="health-loading">
+                <div class="spinner"></div>
+                <span>Checking health...</span>
+            </div>
+            <div id="health-result" class="result" style="display: none;"></div>
+        </div>
 
-    <!-- Update User -->
-    <div class="section">
-        <h2>Update User (PUT /users/&lt;id&gt;)</h2>
-        <label for="update-user-id">User ID:</label>
-        <input type="number" id="update-user-id" name="user_id"><br>
-        <label for="update-username">New Username:</label>
-        <input type="text" id="update-username" name="username"><br>
-        <label for="update-email">New Email:</label>
-        <input type="email" id="update-email" name="email"><br>
-        <button onclick="updateUser()">Update User</button>
-        <pre id="update-user-result"></pre>
-    </div>
+        <!-- Music Discovery Test -->
+        <div class="section">
+            <h2>🔍 Music Discovery Test</h2>
+            <div class="endpoint-url">POST /api/discover</div>
+            <div class="form-group">
+                <label for="discover-input">Music Description:</label>
+                <textarea id="discover-input" rows="2" placeholder="e.g., upbeat electronic music for working out">atmospheric indie rock for late night drives</textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="discover-mood">Mood:</label>
+                    <select id="discover-mood">
+                        <option value="">No mood</option>
+                        <option value="happy">Happy</option>
+                        <option value="sad">Sad</option>
+                        <option value="energetic">Energetic</option>
+                        <option value="calm" selected>Calm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="discover-limit">Limit:</label>
+                    <input type="number" id="discover-limit" value="5" min="1" max="50">
+                </div>
+            </div>
+            <button onclick="testDiscover()">Test Music Discovery</button>
+            <div class="loading" id="discover-loading">
+                <div class="spinner"></div>
+                <span>Discovering music...</span>
+            </div>
+            <div id="discover-result" class="result" style="display: none;"></div>
+        </div>
 
-    <!-- Delete User -->
-    <div class="section">
-        <h2>Delete User (DELETE /users/&lt;id&gt;)</h2>
-        <label for="delete-user-id">User ID:</label>
-        <input type="number" id="delete-user-id" name="user_id"><br>
-        <button onclick="deleteUser()">Delete User</button>
-        <pre id="delete-user-result"></pre>
+        <!-- Story Generation Test -->
+        <div class="section">
+            <h2>📖 Story Generation Test</h2>
+            <div class="endpoint-url">POST /api/story</div>
+            <div class="form-group">
+                <label for="story-username">User Name:</label>
+                <input type="text" id="story-username" value="Alex">
+            </div>
+            <div class="form-group">
+                <label for="story-music">Music Preferences (JSON format):</label>
+                <textarea id="story-music" rows="4">[
+  {"name": "Midnight City", "artist": "M83"},
+  {"name": "Drive", "artist": "The Cars"}
+]</textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="story-type">Story Type:</label>
+                    <select id="story-type">
+                        <option value="journey" selected>Journey</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="reflection">Reflection</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="story-theme">Theme:</label>
+                    <select id="story-theme">
+                        <option value="inspirational" selected>Inspirational</option>
+                        <option value="mysterious">Mysterious</option>
+                        <option value="romantic">Romantic</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="testStory()">Test Story Generation</button>
+            <div class="loading" id="story-loading">
+                <div class="spinner"></div>
+                <span>Generating story...</span>
+            </div>
+            <div id="story-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Trending Test -->
+        <div class="section">
+            <h2>🔥 Trending Music Test</h2>
+            <div class="endpoint-url">GET /api/trending</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="trending-limit">Limit:</label>
+                    <input type="number" id="trending-limit" value="10" min="1" max="50">
+                </div>
+                <div class="form-group">
+                    <label for="trending-category">Category:</label>
+                    <select id="trending-category">
+                        <option value="">All</option>
+                        <option value="music">Music</option>
+                        <option value="artist">Artist</option>
+                        <option value="genre">Genre</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="testTrending()">Test Trending</button>
+            <div class="loading" id="trending-loading">
+                <div class="spinner"></div>
+                <span>Fetching trends...</span>
+            </div>
+            <div id="trending-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Recommendations Test -->
+        <div class="section">
+            <h2>🎵 Similar Recommendations Test</h2>
+            <div class="endpoint-url">POST /api/recommendations</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="rec-seed">Seed Entity:</label>
+                    <input type="text" id="rec-seed" value="Radiohead" placeholder="Artist or song name">
+                </div>
+                <div class="form-group">
+                    <label for="rec-limit">Limit:</label>
+                    <input type="number" id="rec-limit" value="8" min="1" max="20">
+                </div>
+            </div>
+            <button onclick="testRecommendations()">Test Recommendations</button>
+            <div class="loading" id="rec-loading">
+                <div class="spinner"></div>
+                <span>Getting recommendations...</span>
+            </div>
+            <div id="rec-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Mood Analysis Test -->
+        <div class="section">
+            <h2>🎭 Mood Analysis Test</h2>
+            <div class="endpoint-url">POST /api/mood-analysis</div>
+            <div class="form-group">
+                <label for="mood-text">Text to Analyze:</label>
+                <textarea id="mood-text" rows="3">I feel nostalgic and contemplative today, thinking about old memories and simpler times</textarea>
+            </div>
+            <button onclick="testMoodAnalysis()">Test Mood Analysis</button>
+            <div class="loading" id="mood-loading">
+                <div class="spinner"></div>
+                <span>Analyzing mood...</span>
+            </div>
+            <div id="mood-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Test All Endpoints -->
+        <div class="section">
+            <h2>🚀 Test All Endpoints</h2>
+            <p>Run all tests at once to see which endpoints are working:</p>
+            <button onclick="testAllEndpoints()">Test All Endpoints</button>
+            <div class="loading" id="all-loading">
+                <div class="spinner"></div>
+                <span>Testing all endpoints...</span>
+            </div>
+            <div id="all-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: white; border-radius: 10px;">
+            <p><strong>📚 API Documentation:</strong> <a href="https://github.com/HosniBelfeki/BeatTeller/blob/main/API_DOCUMENTATION.md" target="_blank">GitHub Documentation</a></p>
+            <p><strong>👨‍💻 Developer:</strong> <a href="https://www.linkedin.com/in/hosnibelfeki" target="_blank">Hosni Belfeki</a></p>
+        </div>
     </div>
 
     <script>
-        const API_BASE_URL = '/api/users';
-
-        // Helper function to display results
-        function displayResult(elementId, data) {
-            document.getElementById(elementId).textContent = JSON.stringify(data, null, 2);
+        function getBackendUrl() {
+            return 'https://beatteller-backend.onrender.com/api';
         }
 
-        // Helper function to display errors
-        function displayError(elementId, error) {
-            document.getElementById(elementId).textContent = `Error: ${error.message || error}`;
+        function showLoading(loadingId) {
+            document.getElementById(loadingId).style.display = 'block';
         }
 
-        // GET /users
-        async function getUsers() {
-            const resultElementId = 'get-users-result';
+        function hideLoading(loadingId) {
+            document.getElementById(loadingId).style.display = 'none';
+        }
+
+        function displayResult(elementId, data, status = null, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${isError ? 'error' : 'success'}`;
+            
+            let result = '';
+            if (status) {
+                result += `HTTP Status: ${status}\n`;
+                result += `Timestamp: ${new Date().toISOString()}\n`;
+                result += '=' .repeat(50) + '\n';
+            }
+            
+            if (typeof data === 'object') {
+                result += JSON.stringify(data, null, 2);
+            } else {
+                result += data;
+            }
+            
+            element.textContent = result;
+        }
+
+        async function testConnection() {
+            const url = getBackendUrl();
             try {
-                const response = await fetch(API_BASE_URL);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
-                displayResult(resultElementId, data);
+                const response = await fetch(`${url}/health`);
+                if (response.ok) {
+                    console.log('Connection successful to:', url);
+                } else {
+                    console.log('Connection failed to:', url, 'Status:', response.status);
+                }
             } catch (error) {
-                displayError(resultElementId, error);
+                console.log('Connection error:', error.message);
             }
         }
 
-        // POST /users
-        async function createUser() {
-            const resultElementId = 'create-user-result';
-            const username = document.getElementById('create-username').value;
-            const email = document.getElementById('create-email').value;
-            if (!username || !email) {
-                displayError(resultElementId, 'Username and email cannot be empty');
-                return;
-            }
+        async function checkHealth() {
+            showLoading('health-loading');
             try {
-                const response = await fetch(API_BASE_URL, {
+                const response = await fetch(`${getBackendUrl()}/health`);
+                const data = await response.json();
+                displayResult('health-result', data, response.status, !response.ok);
+            } catch (error) {
+                displayResult('health-result', { error: error.message }, null, true);
+            } finally {
+                hideLoading('health-loading');
+            }
+        }
+
+        async function testDiscover() {
+            showLoading('discover-loading');
+            const input = document.getElementById('discover-input').value.trim();
+            const mood = document.getElementById('discover-mood').value;
+            const limit = parseInt(document.getElementById('discover-limit').value);
+
+            const payload = { input, limit };
+            if (mood) payload.mood = mood;
+
+            try {
+                const response = await fetch(`${getBackendUrl()}/discover`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email })
+                    body: JSON.stringify(payload)
                 });
                 const data = await response.json();
-                if (!response.ok) throw new Error(data.message || `HTTP error! status: ${response.status}`);
-                displayResult(resultElementId, data);
-                // 清空输入框
-                document.getElementById('create-username').value = '';
-                document.getElementById('create-email').value = '';
+                displayResult('discover-result', data, response.status, !response.ok);
             } catch (error) {
-                displayError(resultElementId, error);
+                displayResult('discover-result', { error: error.message, sent_payload: payload }, null, true);
+            } finally {
+                hideLoading('discover-loading');
             }
         }
 
-        // GET /users/<id>
-        async function getUser() {
-            const resultElementId = 'get-user-result';
-            const userId = document.getElementById('get-user-id').value;
-            if (!userId) {
-                displayError(resultElementId, 'User ID cannot be empty');
+        async function testStory() {
+            showLoading('story-loading');
+            const userName = document.getElementById('story-username').value.trim();
+            const musicText = document.getElementById('story-music').value.trim();
+            const storyType = document.getElementById('story-type').value;
+            const theme = document.getElementById('story-theme').value;
+
+            let musicPreferences;
+            try {
+                musicPreferences = JSON.parse(musicText);
+            } catch (e) {
+                displayResult('story-result', { error: 'Invalid JSON in music preferences', json_error: e.message }, null, true);
+                hideLoading('story-loading');
                 return;
             }
-            try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`);
-                 if (response.status === 404) throw new Error('User not found');
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
-                displayResult(resultElementId, data);
-            } catch (error) {
-                displayError(resultElementId, error);
-            }
-        }
 
-        // PUT /users/<id>
-        async function updateUser() {
-            const resultElementId = 'update-user-result';
-            const userId = document.getElementById('update-user-id').value;
-            const username = document.getElementById('update-username').value;
-            const email = document.getElementById('update-email').value;
-            if (!userId) {
-                displayError(resultElementId, 'User ID cannot be empty');
-                return;
-            }
-            const updateData = {};
-            if (username) updateData.username = username;
-            if (email) updateData.email = email;
-            if (Object.keys(updateData).length === 0) {
-                 displayError(resultElementId, 'Please enter a username or email to update');
-                 return;
-            }
+            const payload = {
+                user_name: userName,
+                music_preferences: musicPreferences,
+                story_type: storyType,
+                theme: theme
+            };
 
             try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`, {
-                    method: 'PUT',
+                const response = await fetch(`${getBackendUrl()}/story`, {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updateData)
+                    body: JSON.stringify(payload)
                 });
-                if (response.status === 404) throw new Error('User not found');
                 const data = await response.json();
-                 if (!response.ok) throw new Error(data.message || `HTTP error! status: ${response.status}`);
-                displayResult(resultElementId, data);
-                 // Clear input fields
-                document.getElementById('update-username').value = '';
-                document.getElementById('update-email').value = '';
+                displayResult('story-result', data, response.status, !response.ok);
             } catch (error) {
-                displayError(resultElementId, error);
+                displayResult('story-result', { error: error.message, sent_payload: payload }, null, true);
+            } finally {
+                hideLoading('story-loading');
             }
         }
 
-        // DELETE /users/<id>
-        async function deleteUser() {
-            const resultElementId = 'delete-user-result';
-            const userId = document.getElementById('delete-user-id').value;
-            if (!userId) {
-                displayError(resultElementId, 'User ID cannot be empty');
-                return;
-            }
+        async function testTrending() {
+            showLoading('trending-loading');
+            const limit = parseInt(document.getElementById('trending-limit').value);
+            const category = document.getElementById('trending-category').value;
+
+            let url = `${getBackendUrl()}/trending?limit=${limit}`;
+            if (category) url += `&category=${category}`;
+
             try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`, {
-                    method: 'DELETE'
-                });
-                if (response.status === 404) throw new Error('User not found');
-                if (!response.ok && response.status !== 204) throw new Error(`HTTP error! status: ${response.status}`); // Allow 204
-                // 204 No Content indicates success
-                if (response.status === 204) {
-                     displayResult(resultElementId, { message: `User ID ${userId} has been successfully deleted` });
-                } else {
-                     // Try to read potential error message even on success-like status if not 204
-                     const data = await response.text();
-                     displayResult(resultElementId, data || { message: `Deletion successful, status code: ${response.status}` });
-                }
-                 // Clear input field
-                document.getElementById('delete-user-id').value = '';
+                const response = await fetch(url);
+                const data = await response.json();
+                displayResult('trending-result', data, response.status, !response.ok);
             } catch (error) {
-                displayError(resultElementId, error);
+                displayResult('trending-result', { error: error.message, requested_url: url }, null, true);
+            } finally {
+                hideLoading('trending-loading');
             }
         }
+
+        async function testRecommendations() {
+            showLoading('rec-loading');
+            const seedEntity = document.getElementById('rec-seed').value.trim();
+            const limit = parseInt(document.getElementById('rec-limit').value);
+
+            const payload = {
+                seed_entity: seedEntity,
+                limit: limit,
+                include_metadata: true
+            };
+
+            try {
+                const response = await fetch(`${getBackendUrl()}/recommendations`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                displayResult('rec-result', data, response.status, !response.ok);
+            } catch (error) {
+                displayResult('rec-result', { error: error.message, sent_payload: payload }, null, true);
+            } finally {
+                hideLoading('rec-loading');
+            }
+        }
+
+        async function testMoodAnalysis() {
+            showLoading('mood-loading');
+            const text = document.getElementById('mood-text').value.trim();
+
+            const payload = { text };
+
+            try {
+                const response = await fetch(`${getBackendUrl()}/mood-analysis`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                displayResult('mood-result', data, response.status, !response.ok);
+            } catch (error) {
+                displayResult('mood-result', { error: error.message, sent_payload: payload }, null, true);
+            } finally {
+                hideLoading('mood-loading');
+            }
+        }
+
+        async function testAllEndpoints() {
+            showLoading('all-loading');
+            const results = {};
+            const baseUrl = getBackendUrl();
+
+            // Test all endpoints
+            const tests = [
+                { name: 'Health Check', url: `${baseUrl}/health`, method: 'GET' },
+                { name: 'Music Discovery', url: `${baseUrl}/discover`, method: 'POST', body: { input: 'rock music', limit: 3 } },
+                { name: 'Trending', url: `${baseUrl}/trending?limit=3`, method: 'GET' },
+                { name: 'Recommendations', url: `${baseUrl}/recommendations`, method: 'POST', body: { seed_entity: 'Beatles', limit: 3 } },
+                { name: 'Mood Analysis', url: `${baseUrl}/mood-analysis`, method: 'POST', body: { text: 'I feel happy today' } },
+                { name: 'Story Generation', url: `${baseUrl}/story`, method: 'POST', body: { user_name: 'Test', music_preferences: [{ name: 'Test Song' }] } }
+            ];
+
+            for (const test of tests) {
+                try {
+                    const options = {
+                        method: test.method,
+                        headers: { 'Content-Type': 'application/json' }
+                    };
+                    
+                    if (test.body) {
+                        options.body = JSON.stringify(test.body);
+                    }
+
+                    const response = await fetch(test.url, options);
+                    const data = await response.json();
+                    
+                    results[test.name] = {
+                        status: response.status,
+                        success: response.ok,
+                        data: response.ok ? 'SUCCESS - Endpoint working!' : data,
+                        url: test.url
+                    };
+                } catch (error) {
+                    results[test.name] = {
+                        status: 'ERROR',
+                        success: false,
+                        data: error.message,
+                        url: test.url
+                    };
+                }
+            }
+
+            displayResult('all-result', results, null, false);
+            hideLoading('all-loading');
+        }
+
+        // Auto-connect to backend on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-test connection when page loads
+            checkHealth();
+        });
     </script>
 </body>
 </html>
